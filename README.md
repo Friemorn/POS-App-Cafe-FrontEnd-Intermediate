@@ -24,4 +24,4 @@ npm run lint
 See [Configuration Reference](https://cli.vuejs.org/config/).
 
 ### Test Deployment Website
-[ufocafe.fwdev.online](http://ufocafe.fwdev.online/).
+[ufocafe.fwdev.online](http://ufocafe.fwdev.online/)
