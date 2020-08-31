@@ -25,5 +25,5 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
 
 ### Test Deployment Website
 ```
-http://ufocafe.fwdev.online/
+(http://ufocafe.fwdev.online/)
 ```
