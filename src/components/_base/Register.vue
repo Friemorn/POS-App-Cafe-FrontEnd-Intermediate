@@ -38,7 +38,7 @@ export default {
   },
   methods: {
     addUser () {
-      axios.post('http://localhost:4000/api/v1/user/register', {
+      axios.post(process.env.VUE_APP_USER_URL + 'register', {
         email: this.email,
         password: this.password,
         firstName: this.firstName,

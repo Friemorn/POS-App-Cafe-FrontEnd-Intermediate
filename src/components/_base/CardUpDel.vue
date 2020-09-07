@@ -69,17 +69,6 @@ export default {
           this.$swal('Error!', 'Product Failed to Update', 'error')
         })
     },
-    // deleteData (id) {
-    //   axios.delete(`http://localhost:4000/api/v1/product/${id}`)
-    //     .then(res => {
-    //       this.$swal('Edit Success', 'Product Successfully Deleted', 'success')
-    //       // alert('Product Successfully Deleted')
-    //       this.$emit('get-data')
-    //     })
-    //     .catch((res) => {
-    //       this.$swal('Error!', 'Product Failed to Delete', 'error')
-    //     })
-    // }
     deleteData (id) {
       this.$swal.fire({
         title: 'Are you sure?',
@@ -91,7 +80,7 @@ export default {
         confirmButtonText: 'Yes, delete it!'
       }).then((result) => {
         if (result.value) {
-          axios.delete(`http://localhost:4000/api/v1/product/${id}`)
+          axios.delete(process.env.VUE_APP_HISTORY_URL + id)
             .then(res => {
               this.$swal.fire('Delete Success', 'Product Successfully Deleted', 'success')
               this.$emit('get-data')

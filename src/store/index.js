@@ -73,7 +73,7 @@ export default new Vuex.Store({
         if (error.response.status === 401 && error.response.data.result.message === 'Token is Invalid') {
           localStorage.removeItem('token')
           setex.commit('setToken', null)
-          alert("Don't Edit Token")
+          // alert("Don't Edit Token")
           router.push('/')
         } else if (error.response.status === 401 && error.response.data.result.message === 'Token is Expired') {
           localStorage.removeItem('token')
@@ -113,7 +113,7 @@ export default new Vuex.Store({
     login (setex, payload) {
       console.log(payload)
       return new Promise((resolve, reject) => {
-        axios.post('http://localhost:4000/api/v1/user/login', payload)
+        axios.post(process.env.VUE_APP_USER_URL + 'login', payload)
           .then((res) => {
             console.log(res)
             setex.commit('setUser', res.data.result)
@@ -136,7 +136,7 @@ export default new Vuex.Store({
     },
     getProduct (setex, payload) {
       return new Promise((resolve, reject) => {
-        axios.get(`http://localhost:4000/api/v1/product?${payload || ''}page=${this.state.currentPage}&limit=6`)
+        axios.get(process.env.VUE_APP_PRODUCT_URL + `?${payload || ''}page=${this.state.currentPage}&limit=6`)
         // axios.get(`http://localhost:4000/api/v1/product?${payload || ''}&limit=6`)
           .then((res) => {
             setex.commit('setProduct', res.data.result)
@@ -151,7 +151,7 @@ export default new Vuex.Store({
     },
     getOrder (setex) {
       return new Promise((resolve, reject) => {
-        axios.get('http://localhost:4000/api/v1/history')
+        axios.get(process.env.VUE_APP_HISTORY_URL)
           .then((res) => {
             setex.commit('setOrder', res.data.result)
             resolve(res.data.result)

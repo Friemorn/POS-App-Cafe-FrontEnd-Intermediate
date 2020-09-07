@@ -59,7 +59,7 @@ export default {
   },
   methods: {
     addHistory () {
-      axios.post('http://localhost:4000/api/v1/history', {
+      axios.post(process.env.VUE_APP_HISTORY_URL, {
         invoices: this.invoices,
         cashier: this.cashier,
         cashierName: this.cashierName,

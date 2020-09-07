@@ -10,7 +10,7 @@
             <img src="../../../assets/img/menu.png" alt="menu" />
           </div>
           <div class="title">Food Items</div>
-          <div class="search">
+          <div class="search" @click="SearchOn">
             <img src="../../../assets/img/magnifying-glass.png" alt="search" />
           </div>
         </nav>
@@ -18,7 +18,7 @@
       </div>
       <div class="sort-search">
         <div class="sort"><Sort/></div>
-        <div class="search"><Search/></div>
+        <div class="search"><Search v-show="showSearch"/></div>
       </div>
       <div class="main-content">
         <div class="card-product">
@@ -56,7 +56,8 @@ export default {
   },
   data () {
     return {
-      showModalAdd: false
+      showModalAdd: false,
+      showSearch: false
     }
   },
   methods: {
@@ -65,6 +66,13 @@ export default {
     },
     AddOff () {
       this.showModalAdd = false
+    },
+    SearchOn () {
+      if (!this.showSearch) {
+        this.showSearch = true
+      } else {
+        this.showSearch = false
+      }
     },
     ...mapActions(['getProduct'])
   },
