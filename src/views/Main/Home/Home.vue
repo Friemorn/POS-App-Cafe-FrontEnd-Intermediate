@@ -6,19 +6,28 @@
     <div class="main">
       <div class="main-header">
         <nav class="navbar">
-          <div class="menu">
+          <div class="menu" @click="SideBarOn">
             <img src="../../../assets/img/menu.png" alt="menu" />
           </div>
           <div class="title">Food Items</div>
-          <div class="search">
+          <div class="btn-search" @click="SearchOn">
             <img src="../../../assets/img/magnifying-glass.png" alt="search" />
           </div>
         </nav>
-        <SideBar @launch-modaladd = "AddOn"/>
+        <SideBar v-show="showSideBar" @launch-modaladd = "AddOn"/>
+        <div class="sort-search">
+          <div class="sort"><Sort/></div>
+          <div class="search"><Search v-show="showSearch"/></div>
+        </div>
       </div>
       <div class="main-content">
         <div class="card-product" v-for="product in products" :key="product.id">
           <CardAdd :image="product.image" :name="product.name" :price="product.price" :id="product.id"/>
+        </div>
+      </div>
+      <div class="pagination">
+        <div class="page">
+          <Pagination :data="pagination"/>
         </div>
       </div>
     </div>
@@ -30,7 +39,7 @@
         </nav>
       </div>
       <div class="cart-content">
-        <div v-if="emptyCart">
+        <div v-if="countCart === 0">
           <div class="cart-null">
             <img src="../../../assets/img/food-and-restaurant.png" alt="food-cart">
             <br>
@@ -40,9 +49,7 @@
         </div>
         <div v-else>
           <div class="cart-value">
-            <div class="cart-list" v-for="product in products" :key="product.id">
-              <CartList :image="product.image" :name="product.name" :price="product.price"/>
-            </div>
+              <CartList/>
           </div>
           <div class="cart-total">
             <CartTotal @launch-modalcheckout = "CheckoutOn"/>
@@ -60,7 +67,10 @@ import ModalAdd from '../../../components/_base/ModalAdd'
 import ModalCheckout from '../../../components/_base/ModalCheckout'
 import CartList from '../../../components/_base/CartList'
 import CartTotal from '../../../components/_base/CartTotal'
-import { mapActions, mapGetters } from 'vuex'
+import Pagination from '../../../components/_base/Pagination'
+import Sort from '../../../components/_base/Sort'
+import Search from '../../../components/_base/Search'
+import { mapMutations, mapActions, mapGetters } from 'vuex'
 
 export default {
   name: 'Home',
@@ -70,14 +80,19 @@ export default {
     ModalAdd,
     ModalCheckout,
     CartList,
-    CartTotal
+    CartTotal,
+    Pagination,
+    Sort,
+    Search
   },
   data () {
     return {
       username: '',
       password: '',
+      showSideBar: true,
       showModalAdd: false,
-      showModalCheckout: false
+      showModalCheckout: false,
+      showSearch: false
     }
   },
   methods: {
@@ -100,10 +115,25 @@ export default {
     CheckoutOff () {
       this.showModalCheckout = false
     },
+    SideBarOn () {
+      if (!this.showSideBar) {
+        this.showSideBar = true
+      } else {
+        this.showSideBar = false
+      }
+    },
+    SearchOn () {
+      if (!this.showSearch) {
+        this.showSearch = true
+      } else {
+        this.showSearch = false
+      }
+    },
+    ...mapMutations(['addToCart']),
     ...mapActions(['login', 'getProduct'])
   },
   computed: {
-    ...mapGetters(['countCart', 'emptyCart', 'products'])
+    ...mapGetters(['countCart', 'products', 'pagination'])
   },
   mounted () {
     this.getProduct()
@@ -132,15 +162,16 @@ export default {
   width: 30px;
 }
 .main-content {
-  height: 810px;
+  height: 550px;
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
+  justify-content: space-around;
   overflow: auto;
-  margin: 0 20px 0 150px;
+  margin: 0 20px 0 100px;
   padding-top: 10px;
 }
-.navbar{
+.navbar {
   width: 100%;
   height: 80px;
   font-size: 25px;
@@ -151,6 +182,32 @@ export default {
   background-color: white;
   box-shadow: 0px 5px 5px rgba(0, 0, 0, 0.2);
 }
+.menu:hover {
+  background-color: rgba(207, 207, 207, 0.6);
+  border-radius: 5px;
+}
+.sort-search {
+  height: 80px;
+  margin: 0 20px -10px 125px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+.sort {
+  margin-top: 15px;
+  text-align: center;
+}
+.search {
+  margin-top: 8px;
+  align-items: center;
+}
+.pagination {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  margin: 15px 20px 0 125px;
+}
 .menu {
   margin: 5px 0 0 5px;
   text-align: center;
@@ -159,7 +216,7 @@ export default {
     flex: 1;
     text-align: right;
 }
-.search {
+.btn-search {
     flex: 1;
     text-align: right;
 }
@@ -208,8 +265,7 @@ export default {
 }
 .cart-value {
   width: 400px;
-  height: 500px;
-  margin-bottom: 30px;
+  height: 380px;
   overflow: auto;
 }
 .cart-total {

@@ -1,30 +1,34 @@
 <template>
   <div class="contain">
     <router-view/>
-      <div class="main-header">
-        <NavbarHistory/>
-      </div>
-        <div class="history-content">
-          <SideBar/>
-          <div class="history-list">
-            <div class="card-history">
-              <div class="cti"><CardTodaysIncome/></div>
-              <div class="co"><CardOrders/></div>
-              <div class="ctyi"><CardThisYearsIncome/></div>
-            </div>
-            <div class="revenue">
-              <CardRevenue/>
-            </div>
-            <div class="recent-order">
-              <CardRecentOrder :order = "orders" @get-data = "getOrder"/>
-            </div>
-          </div>
+    <div class="main-header">
+      <nav>
+        <div class="navbar" @click="SideBarOn">
+          <img class="menu" src="../../../assets/img/menu.png" alt="menu" />
         </div>
+        <div class="title">History</div>
+      </nav>
+    </div>
+    <div class="history-content">
+      <SideBar v-show="showSideBar"/>
+      <div class="history-list">
+        <div class="card-history">
+          <div class="cti"><CardTodaysIncome/></div>
+          <div class="co"><CardOrders/></div>
+          <div class="ctyi"><CardThisYearsIncome/></div>
+        </div>
+        <div class="revenue">
+          <CardRevenue/>
+        </div>
+        <div class="recent-order">
+          <CardRecentOrder :orders = "order" @get-data = "getOrder"/>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
-import NavbarHistory from '../../../components/_base/NavbarHistory'
 import SideBar from '../../../components/_base/SideBar'
 import CardTodaysIncome from '../../../components/_base/CardTodaysIncome'
 import CardOrders from '../../../components/_base/CardOrders'
@@ -36,7 +40,6 @@ import { mapActions, mapGetters } from 'vuex'
 export default {
   name: 'History',
   components: {
-    NavbarHistory,
     SideBar,
     CardTodaysIncome,
     CardOrders,
@@ -44,11 +47,23 @@ export default {
     CardRevenue,
     CardRecentOrder
   },
+  data () {
+    return {
+      showSideBar: true
+    }
+  },
   methods: {
-    ...mapActions(['getOrder'])
+    ...mapActions(['getOrder']),
+    SideBarOn () {
+      if (!this.showSideBar) {
+        this.showSideBar = true
+      } else {
+        this.showSideBar = false
+      }
+    }
   },
   computed: {
-    ...mapGetters(['orders'])
+    ...mapGetters(['order'])
   },
   mounted () {
     this.getOrder()
@@ -60,6 +75,7 @@ export default {
 /* Home Container */
 .contain {
   width: 100%;
+  height: 780px;
   display: flex;
   flex-direction: column;
   font-family: Arial, Verdana, sans-serif;
@@ -68,6 +84,29 @@ export default {
 }
 .history-header{
   width: 100%;
+}
+nav{
+  width: 100%;
+  height: 80px;
+  font-size: 25px;
+  padding: 20px 25px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: row;
+  background-color: white;
+}
+.navbar:hover {
+  background-color: rgba(207, 207, 207, 0.6);
+  border-radius: 5px;
+  text-align: center;
+}
+.menu {
+  flex: 1;
+  margin: -10px 0 0 -10px;
+}
+.title {
+  width: 95%;
+  text-align: center;
 }
 .history-menu {
   width: 5%;
@@ -118,6 +157,7 @@ export default {
 .recent-order {
   width: 100%;
   padding: 20px;
+  margin-bottom: 50px;
   background-color: white;
   border-radius: 10px;
   box-shadow: 10px 10px 20px rgba(0, 0, 0, 0.25);

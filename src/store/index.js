@@ -9,25 +9,20 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    countCart: 0,
-    countCartList: 1,
+    pagination: null,
+    currentPage: 1,
+    selected: false,
     selectedFile: null,
     token: localStorage.getItem('token') || null,
     user: {},
     products: [],
-    productList: {},
+    carts: [],
     orders: [],
-    empty: true
+    total: []
   },
   mutations: {
-    setCount (state, payload) {
-      state.countCart = payload
-    },
-    setMinus (state) {
-      state.countCartList--
-    },
-    setPlus (state) {
-      state.countCartList++
+    setPagination (state, payload) {
+      state.pagination = payload
     },
     setUser (state, payload) {
       state.user = payload
@@ -36,17 +31,37 @@ export default new Vuex.Store({
     setProduct (state, payload) {
       state.products = payload
     },
-    setProductList (state, payload) {
-      state.productList = payload
+    setSelect (state) {
+      state.select = false
+    },
+    addToCart (state, payload) {
+      const isCart = state.carts.find((item) => {
+        return item.id === payload.id
+      })
+      if (!isCart) {
+        const data = payload
+        data.quantity = 1
+        data.total = null
+        state.carts.push(data)
+      }
+    },
+    removeFromCart (state, payload) {
+      state.carts = state.carts.filter((item) => {
+        return item.id !== payload.id
+      })
+    },
+    setEmptyCart (state) {
+      state.carts = []
+    },
+    setTotal (state, payload) {
+      state.total = payload
+      console.log(payload)
     },
     setOrder (state, payload) {
       state.orders = payload
     },
     setToken (state, payload) {
       state.token = payload
-    },
-    setEmpty (state, payload) {
-      state.empty = payload
     }
   },
   actions: {
@@ -68,20 +83,21 @@ export default new Vuex.Store({
         } else if (error.response.status === 403 && error.response.data.result.message === 'Email Not Found!') {
           localStorage.removeItem('token')
           setex.commit('setToken', null)
+          // this.$swal('Error!', 'Email Address is Wrong!', 'error')
           alert('Email Address is Wrong!')
           router.push('/')
         } else if (error.response.status === 403 && error.response.data.result.message === 'Password is Wrong!') {
           localStorage.removeItem('token')
           setex.commit('setToken', null)
+          // this.$swal('Error!', 'Password is Wrong!', 'error')
           alert('Password is Wrong!')
           router.push('/')
-        } else if (error.response.status === 403 && error.response.data.result.message === 'Email is Already Registered') {
-          alert('Email is Already Registered!')
-          router.push('/')
         } else if (error.response.status === 403 && error.response.data.result.message === 'Only Images with Extentions (jpeg/jpg/png) are Allowed') {
+          // this.$swal('Error!', 'Only Images with Extentions (jpeg/jpg/png) are Allowed!', 'error')
           alert('Only Images with Extentions (jpeg/jpg/png) are Allowed')
         } else if (error.response.status === 403 && error.response.data.result.message === 'File Too Large') {
-          alert('Cannot Upload File Beacuse File Too Large')
+          // this.$swal('Error!', 'Cannot Upload File Because File Too Large', 'error')
+          alert('Cannot Upload File Because File Too Large')
         }
         return Promise.reject(error)
       })
@@ -111,11 +127,20 @@ export default new Vuex.Store({
           })
       })
     },
-    getProduct (setex) {
+    logout () {
       return new Promise((resolve, reject) => {
-        axios.get('http://localhost:4000/api/v1/product?page=1&limit=12')
+        if (this.state.token !== null) {
+          localStorage.removeItem('token')
+        }
+      })
+    },
+    getProduct (setex, payload) {
+      return new Promise((resolve, reject) => {
+        axios.get(`http://localhost:4000/api/v1/product?${payload || ''}page=${this.state.currentPage}&limit=6`)
+        // axios.get(`http://localhost:4000/api/v1/product?${payload || ''}&limit=6`)
           .then((res) => {
             setex.commit('setProduct', res.data.result)
+            setex.commit('setPagination', res.data.resultPage)
             resolve(res.data.result)
           })
           .reject((err) => {
@@ -139,11 +164,11 @@ export default new Vuex.Store({
     }
   },
   getters: {
-    countCart (state) {
-      return state.countCart
+    pagination (state) {
+      return state.pagination
     },
-    countCartList (state) {
-      return state.countCartList
+    countCart (state) {
+      return state.carts.length
     },
     isLogin (state) {
       return state.token !== null
@@ -151,14 +176,17 @@ export default new Vuex.Store({
     products (state) {
       return state.products
     },
-    productLists (state) {
-      return state.productList
+    cart (state) {
+      return state.carts
     },
-    orders (state) {
+    order (state) {
       return state.orders
     },
-    emptyCart (state) {
-      return state.empty
+    total (state) {
+      return state.total
+    },
+    select (state) {
+      return state.select
     }
   },
   modules: {

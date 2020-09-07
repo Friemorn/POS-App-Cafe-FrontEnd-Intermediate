@@ -7,6 +7,11 @@
           <td class="table-right">
             <select name="today" class="drop-down">
               <option value="Today">Today</option>
+              <option value="Today">Yesterday</option>
+              <option value="Today">This Month</option>
+              <option value="Today">Last Month</option>
+              <option value="Today">This Year</option>
+              <option value="Today">Last Year</option>
             </select>
           </td>
         </tr>
@@ -16,15 +21,15 @@
       <table id="table-recent-value" border="0" cellspacing="0" cellpadding="5">
         <thead>
           <tr>
-            <th>INVOICES</th>
-            <th>CASHIER</th>
-            <th>DATE</th>
-            <th>ORDERS</th>
-            <th>AMOUNT</th>
-          </tr>
+          <th>INVOICES</th>
+          <th>CASHIER</th>
+          <th>DATE</th>
+          <th>ORDERS</th>
+          <th>AMOUNT</th>
+        </tr>
         </thead>
         <tbody>
-          <tr class="table-value" v-for="item in order" :key="item.idHistory">
+          <tr class="table-value" v-for="item in orders" :key="item.idHistory">
             <td>{{item.invoices}}</td>
             <td>{{item.cashier}}</td>
             <td>{{item.date}}</td>
@@ -40,7 +45,7 @@
 <script>
 export default {
   name: 'CardRecentOrder',
-  props: ['order', 'get-data']
+  props: ['orders', 'get-data']
 }
 </script>
 
@@ -49,6 +54,11 @@ export default {
 #table-recent-value {
   width: 100%;
   padding: 20px;
+}
+.recent-value {
+  height: 200px;
+  width: 100%;
+  overflow-x: auto;
 }
 .table-recent-value {
   font-size: 10px;

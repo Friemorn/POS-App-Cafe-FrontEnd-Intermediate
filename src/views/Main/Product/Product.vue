@@ -16,9 +16,18 @@
         </nav>
         <SideBar @launch-modaladd = "AddOn"/>
       </div>
+      <div class="sort-search">
+        <div class="sort"><Sort/></div>
+        <div class="search"><Search/></div>
+      </div>
       <div class="main-content">
         <div class="card-product">
           <CardUpDel :foods = "products" @get-data = "getProduct"/>
+        </div>
+      </div>
+      <div class="pagination">
+        <div class="page">
+          <Pagination :data="pagination"/>
         </div>
       </div>
     </div>
@@ -30,6 +39,9 @@
 import SideBar from '../../../components/_base/SideBar'
 import ModalAdd from '../../../components/_base/ModalAdd'
 import CardUpDel from '../../../components/_base/CardUpDel'
+import Sort from '../../../components/_base/Sort'
+import Search from '../../../components/_base/Search'
+import Pagination from '../../../components/_base/Pagination'
 import { mapActions, mapGetters } from 'vuex'
 
 export default {
@@ -37,7 +49,10 @@ export default {
   components: {
     SideBar,
     ModalAdd,
-    CardUpDel
+    CardUpDel,
+    Sort,
+    Search,
+    Pagination
   },
   data () {
     return {
@@ -54,7 +69,7 @@ export default {
     ...mapActions(['getProduct'])
   },
   computed: {
-    ...mapGetters(['products'])
+    ...mapGetters(['products', 'pagination'])
   },
   mounted () {
     this.getProduct()
@@ -72,14 +87,13 @@ export default {
   background-color: rgba(190, 195, 202, 0.3);
 }
 .main-content {
-  height: 820px;
+  height: 550px;
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
   overflow: auto;
   justify-content: center;
   margin: 0 0 0 100px;
-  padding-top: 10px;
 }
 .navbar{
   width: 100%;
@@ -103,5 +117,27 @@ export default {
 .search {
     flex: 1;
     text-align: right;
+}
+.sort-search {
+  height: 80px;
+  margin: 0 20px -10px 125px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+.sort {
+  margin-top: 15px;
+  text-align: center;
+}
+.search {
+  margin-top: 8px;
+  align-items: center;
+}
+.pagination {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  margin: 5px 20px 0 165px;
 }
 </style>

@@ -10,19 +10,15 @@
           <td class="cahier" colspan="2">Cashier : Pevita Pearce</td>
         </tr>
       </table>
-      <table id="table-checkout-value" border="0" cellspacing="0" cellpadding="1">
-        <tr>
-          <td>Coffe Latte 1x</td>
-          <td class="table-right">Rp. 15.000</td>
-        </tr>
-        <tr>
-          <td>Black Forest 1x</td>
-          <td class="table-right">Rp. 30.000</td>
-        </tr>
-        <tr>
-          <td>Salmon Tuffle Teriyaki 1x</td>
-          <td class="table-right">Rp. 60.000</td>
-        </tr>
+      <div class="container-table">
+        <table id="table-checkout-value" border="0" cellspacing="0" cellpadding="1">
+          <tr v-for="item in cart" :key="item.id">
+            <td>{{item.name}} {{item.quantity}}x</td>
+            <td class="table-right">Rp. {{item.price}}</td>
+          </tr>
+        </table>
+      </div>
+      <table id="table-checkout-total" border="0" cellspacing="0" cellpadding="1">
         <tr>
           <td>Ppn 10%</td>
           <td class="table-right">Rp. 10.500</td>
@@ -36,7 +32,7 @@
       </table>
       <div class="button-checkout">
         <div>
-          <button id="btn-print">Print</button>
+          <button id="btn-print" @click="$emit('close-modal')">Print</button>
         </div>
         <div id="or">Or</div>
         <div><Button id="btn-send-email">Send Email</Button></div>
@@ -46,8 +42,41 @@
 </template>
 
 <script>
+import axios from 'axios'
+import { mapGetters } from 'vuex'
+
 export default {
-  name: 'ModalCheckout'
+  name: 'ModalCheckout',
+  props: ['close-modal'],
+  data () {
+    return {
+      invoices: '#10930',
+      cashier: 1,
+      cashierName: 'Pevita Pearce',
+      orders: '',
+      amount: null
+    }
+  },
+  methods: {
+    addHistory () {
+      axios.post('http://localhost:4000/api/v1/history', {
+        invoices: this.invoices,
+        cashier: this.cashier,
+        cashierName: this.cashierName,
+        orders: this.orders,
+        amount: this.amount
+      })
+        .then((res) => {
+          alert('Orders Added')
+          this.$emit('close-modal')
+        })
+        .catch((res) => {
+        })
+    }
+  },
+  computed: {
+    ...mapGetters(['countCart', 'cart', 'total'])
+  }
 }
 </script>
 
@@ -74,10 +103,18 @@ export default {
     padding: 20px;
     width: 100%;
 }
+.container-table {
+  overflow-x: auto;
+  height: 150px;
+}
 #table-checkout-value {
     padding: 0px 20px;
     width: 100%;
-    height: 50%;
+    overflow-y: auto;
+}
+#table-checkout-total {
+    width: 100%;
+    height: 50px;
 }
 .table-right {
     text-align: right;

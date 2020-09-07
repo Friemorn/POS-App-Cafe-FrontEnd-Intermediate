@@ -50,6 +50,13 @@ export default {
       }
       this.login(data)
         .then(() => {
+          this.$swal.fire({
+            position: 'top-end',
+            icon: 'success',
+            title: 'Welcome!',
+            showConfirmButton: false,
+            timer: 1500
+          })
           this.$router.push('/home')
         })
     },

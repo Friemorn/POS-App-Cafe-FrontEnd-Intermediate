@@ -1,37 +1,37 @@
 <template>
-    <div class="cart-list">
+  <div class="product-list">
+    <div class="cart-list" v-for="item in cart" :key="item.id">
       <div class="cart-img">
-        <img :src="image" alt="coffelatte">
+        <img id="img" :src="item.image" alt="img">
       </div>
       <div class="cart-quantity">
-        <div class="cart-list-name">{{name}}</div>
+        <div class="cart-list-name">{{item.name}}</div>
         <div class="qty">
           <div class="cart-counter">
-            <div class="minus" @click="setMinus">-</div>
-            <div class="number">{{countCartList}}</div>
-            <div class="plus" @click="setPlus">+</div>
+            <div class="minus" @click="item.quantity--" :disabled="item.quantity === 1">-</div>
+            <div class="number">{{item.quantity}}</div>
+            <div class="plus" @click="item.quantity++">+</div>
           </div>
           <div class="counter-price">
-            <div class="cart-price">Rp. {{price}}</div>
+            <div class="cart-price">Rp. {{item.total = item.quantity * item.price}}</div>
           </div>
         </div>
         <div/>
       </div>
     </div>
+  </div>
 </template>
 
 <script>
-import { mapActions, mapMutations, mapGetters } from 'vuex'
+import { mapMutations, mapGetters } from 'vuex'
 
 export default {
   name: 'CartList',
-  props: ['name', 'image', 'price', 'id'],
   methods: {
-    ...mapActions(['getProduct']),
-    ...mapMutations(['setPlus', 'setMinus'])
+    ...mapMutations(['addToCart'])
   },
   computed: {
-    ...mapGetters(['countCartList'])
+    ...mapGetters(['cart', 'total'])
   }
 }
 </script>
@@ -58,7 +58,13 @@ export default {
   height: 100px;
   width: 100px;
   flex: 1;
-  text-align: center;
+}
+#img {
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
 }
 .cart-quantity {
   flex: 2;

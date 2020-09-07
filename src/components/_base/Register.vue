@@ -45,12 +45,10 @@ export default {
         lastName: this.lastName
       })
         .then((res) => {
-          alert('User Added Successfully')
-          this.$emit('close')
-          this.$emit('login')
+          this.$swal('Register Success', 'User Added Successfully', 'success')
         })
         .catch((res) => {
-          // alert('User Failed to Add')
+          this.$swal('Warning!', 'User Already Registered', 'warning')
         })
     }
   }

@@ -1,10 +1,10 @@
 <template>
   <div class="card-product">
     <div class="card-image">
-      <div class="img-product">
-        <img id="img-product" :src="image" alt="img-product" @click="selectedCart"/>
+      <div class="img-product" @click="selectedProduct">
+        <img id="img" :src="image" alt="img-product"/>
       </div>
-      <div v-show="select" class="checklist" @click="unselectedCart">
+      <div v-show="select" class="checklist" @click="unSelectedProduct">
         <img id="select" src="../../assets/img/tick.png" alt="select">
       </div>
     </div>
@@ -16,7 +16,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapMutations, mapGetters } from 'vuex'
 
 export default {
   name: 'CardAdd',
@@ -27,27 +27,36 @@ export default {
     }
   },
   methods: {
-    selectedCart () {
+    ...mapMutations(['addToCart', 'removeFromCart', 'setSelect']),
+    selectedProduct () {
       this.select = true
-      this.emptyCart = false
-      this.countCart++
+      this.addToCart({
+        name: this.name,
+        image: this.image,
+        price: this.price,
+        id: this.id
+      })
     },
-    unselectedCart () {
+    unSelectedProduct () {
       this.select = false
-      this.emptyCart = true
-      this.countCart--
-    },
-    computed: {
-      ...mapGetters(['countCart', 'emptyCart', 'productList'])
+      this.removeFromCart({
+        name: this.name,
+        image: this.image,
+        price: this.price,
+        id: this.id
+      })
     }
+  },
+  computed: {
+    ...mapGetters(['select'])
   }
 }
 </script>
 
 <style scoped>
 .card-product {
-  margin: 10px;
-  height: 247px;
+  margin: 10px 10px 10px 10px;
+  height: 255px;
   width: 250px;
   display: flex;
   flex-direction: column;
@@ -55,10 +64,17 @@ export default {
 .card-box{
   font-weight: 500;
 }
-.card-image, #img-product {
-    height: 200px;
-    width: 250px;
-    background-size: cover;
+.img-product {
+  height: 200px;
+  width: 250px;
+  cursor: pointer;
+}
+#img {
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
 }
 .card-image {
   position: relative;
@@ -69,6 +85,8 @@ export default {
   background-color: rgba(0, 0, 0, 0.4);
   position: absolute;
   margin-top: -200px;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
 }
 #select {
   height: 50px;

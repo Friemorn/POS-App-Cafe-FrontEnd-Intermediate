@@ -63,13 +63,20 @@ export default {
       formData.append('idCategory', this.idCategory)
       axios.post(process.env.VUE_APP_PRODUCT_URL, formData)
         .then((res) => {
-          alert('Product Added Successfully')
+          this.$swal('Input Success', 'Product Added Successfully', 'success')
           this.$emit('close-modal')
+          this.clearData()
           this.$emit('get-data')
         })
         .catch((res) => {
-          alert('Product Failed to Add')
+          this.$swal('Error!', 'Product Failed to Add', 'error')
         })
+    },
+    clearData () {
+      this.name = ''
+      this.FILE = null
+      this.price = ''
+      this.idCategory = 0
     }
   }
 }

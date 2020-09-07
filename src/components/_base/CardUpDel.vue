@@ -60,24 +60,47 @@ export default {
       formData.append('image', this.FILE, this.FILE.name)
       formData.append('price', item.price)
       formData.append('idCategory', item.idCategory)
-      axios.patch(process.env.VUE_APP_PRODUCT_URL + id, formData)
+      axios.patch(`http://localhost:4000/api/v1/product/${id}`, formData)
         .then((res) => {
-          alert('Product Successfully Updated')
+          this.$swal('Edit Success', 'Product Successfully Updated', 'success')
           this.$emit('get-data')
         })
         .catch((res) => {
-          alert('Product Failed to Update')
+          this.$swal('Error!', 'Product Failed to Update', 'error')
         })
     },
+    // deleteData (id) {
+    //   axios.delete(`http://localhost:4000/api/v1/product/${id}`)
+    //     .then(res => {
+    //       this.$swal('Edit Success', 'Product Successfully Deleted', 'success')
+    //       // alert('Product Successfully Deleted')
+    //       this.$emit('get-data')
+    //     })
+    //     .catch((res) => {
+    //       this.$swal('Error!', 'Product Failed to Delete', 'error')
+    //     })
+    // }
     deleteData (id) {
-      axios.delete(process.env.VUE_APP_PRODUCT_URL + id)
-        .then(res => {
-          alert('Product Successfully Deleted')
-          this.$emit('get-data')
-        })
-        .catch((res) => {
-          alert('Product Failed to Delete')
-        })
+      this.$swal.fire({
+        title: 'Are you sure?',
+        text: "You won't be able to revert this!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!'
+      }).then((result) => {
+        if (result.value) {
+          axios.delete(`http://localhost:4000/api/v1/product/${id}`)
+            .then(res => {
+              this.$swal.fire('Delete Success', 'Product Successfully Deleted', 'success')
+              this.$emit('get-data')
+            })
+            .catch((res) => {
+              this.$swal('Error!', 'Product Failed to Delete', 'error')
+            })
+        }
+      })
     }
   }
 }
@@ -88,7 +111,7 @@ export default {
 .card-product {
   height: auto;
   width: auto;
-  margin: 20px;
+  margin-bottom: 17px;
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
@@ -99,7 +122,13 @@ export default {
 .card-image {
   height: 200px;
   width: 250px;
-  margin: 20px;
+  margin: 30px 20px 0 20px;
+}
+#img-product {
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+  border-radius: 10px;
 }
 .card-box {
   margin: 20px;
@@ -138,9 +167,5 @@ input[type=text],
 #btn-update {
   color: white;
   background-color: #57CAD5;
-}
-#img-product {
-  height: 200px;
-  width: 250px;
 }
 </style>
