@@ -60,7 +60,7 @@ export default {
       formData.append('image', this.FILE, this.FILE.name)
       formData.append('price', item.price)
       formData.append('idCategory', item.idCategory)
-      axios.patch(`http://localhost:4000/api/v1/product/${id}`, formData)
+      axios.patch(process.env.VUE_APP_PRODUCT_URL + id, formData)
         .then((res) => {
           this.$swal('Edit Success', 'Product Successfully Updated', 'success')
           this.$emit('get-data')
@@ -80,7 +80,7 @@ export default {
         confirmButtonText: 'Yes, delete it!'
       }).then((result) => {
         if (result.value) {
-          axios.delete(process.env.VUE_APP_HISTORY_URL + id)
+          axios.delete(process.env.VUE_APP_PRODUCT_URL + id)
             .then(res => {
               this.$swal.fire('Delete Success', 'Product Successfully Deleted', 'success')
               this.$emit('get-data')
