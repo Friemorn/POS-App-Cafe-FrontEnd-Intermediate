@@ -50,12 +50,21 @@ export default {
       }
       this.login(data)
         .then(() => {
-          this.$swal.fire({
+          const Toast = this.$swal.mixin({
+            toast: true,
             position: 'top-end',
-            icon: 'success',
-            title: 'Welcome!',
             showConfirmButton: false,
-            timer: 1500
+            timer: 3000,
+            timerProgressBar: true,
+            onOpen: (toast) => {
+              toast.addEventListener('mouseenter', this.$swal.stopTimer)
+              toast.addEventListener('mouseleave', this.$swal.resumeTimer)
+            }
+          })
+
+          Toast.fire({
+            icon: 'success',
+            title: 'Signed in successfully'
           })
           this.$router.push('/home')
         })

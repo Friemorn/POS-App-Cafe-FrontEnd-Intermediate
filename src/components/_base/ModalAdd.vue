@@ -69,7 +69,7 @@ export default {
           this.$emit('get-data')
         })
         .catch((res) => {
-          this.$swal('Error!', 'Product Failed to Add', 'error')
+          // this.$swal('Error!', 'Product Failed to Add', 'error')
         })
     },
     clearData () {

@@ -65,38 +65,8 @@ export default {
 
 <style scoped>
 /* Desktop */
-/* .jumbotron {
-    height: 450px;
-    background-image: url('../../../assets/img/coffee.jpg');
-    background-size: cover;
-    background-position: 0 -350px;
-    background-repeat: no-repeat;
-    color: white;
-    padding-top: 50px;
-    text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.5)
-}
-.nav-link {
-    text-transform: uppercase;
-}
-.jumbotron .display-4 {
-    font-size: 60px;
-}
-.jumbotron .lead {
-    font-size: 30px;
-}
-.services {
-    padding: 30px;
-    margin-top: -150px;
-    background-color: white;
-    border-radius: 20px;
-    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5)
-}
-.services img {
-    height: 80px;
-    margin: 10px;
-} */
 .content {
-  height: 663px;
+  height: 100vh;
   background-image: url('../../../assets/img/coffee.jpg');
   background-size: cover;
   background-repeat: no-repeat;

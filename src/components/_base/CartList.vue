@@ -13,7 +13,7 @@
             <div class="plus" @click="item.quantity++">+</div>
           </div>
           <div class="counter-price">
-            <div class="cart-price">Rp. {{item.total = item.quantity * item.price}}</div>
+            <div class="cart-price">Rp. {{item.quantity * item.price}}</div>
           </div>
         </div>
         <div/>

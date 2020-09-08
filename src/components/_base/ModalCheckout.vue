@@ -14,17 +14,17 @@
         <table id="table-checkout-value" border="0" cellspacing="0" cellpadding="1">
           <tr v-for="item in cart" :key="item.id">
             <td>{{item.name}} {{item.quantity}}x</td>
-            <td class="table-right">Rp. {{item.price}}</td>
+            <td class="table-right">Rp. {{item.price * item.quantity}}</td>
           </tr>
         </table>
       </div>
       <table id="table-checkout-total" border="0" cellspacing="0" cellpadding="1">
         <tr>
           <td>Ppn 10%</td>
-          <td class="table-right">Rp. 10.500</td>
+          <td class="table-right">Rp. {{ppn()}}</td>
         </tr>
         <tr>
-          <td class="table-right" colspan="2">Total : Rp. 115.500</td>
+          <td class="table-right" colspan="2">Total : Rp. {{totalPrice()}}</td>
         </tr>
         <tr>
           <td colspan="2">Payment : Cash</td>
@@ -58,6 +58,12 @@ export default {
     }
   },
   methods: {
+    totalPrice () {
+      return this.cart.reduce((a, b) => a + b.quantity * 11 / 10 * b.price, 0)
+    },
+    ppn () {
+      return this.cart.reduce((a, b) => a + b.quantity * 1 / 10 * b.price, 0)
+    },
     addHistory () {
       axios.post(process.env.VUE_APP_HISTORY_URL, {
         invoices: this.invoices,

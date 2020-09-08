@@ -5,7 +5,7 @@
         <div class="tot">Total : </div>
         <div class="ppn">*Belum termasuk ppn</div>
     </div>
-    <div class="total-price">Rp. {{totalPrice}}*</div>
+    <div class="total-price">Rp. {{total()}}*</div>
     </div>
         <Button id="btn-checkout" @click="$emit('launch-modalcheckout')">Checkout</Button>
         <button id="btn-cancel-select" @click="removeCart">Cancel</button>
@@ -18,19 +18,17 @@ import { mapGetters, mapMutations } from 'vuex'
 export default {
   name: 'CartTotal',
   props: ['launch-modalcheckout'],
-  data () {
-    return {
-      totalPrice: null
-    }
-  },
   methods: {
     ...mapMutations(['setEmptyCart']),
+    total () {
+      return this.cart.reduce((a, b) => a + b.quantity * b.price, 0)
+    },
     removeCart () {
       this.setEmptyCart()
     }
   },
   computed: {
-    ...mapGetters(['countCart', 'cart', 'total'])
+    ...mapGetters(['countCart', 'cart'])
   }
 }
 </script>

@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import axios from 'axios'
 import router from '../router/index'
+import swal from 'sweetalert'
 
 Vue.use(Vuex)
 
@@ -17,8 +18,7 @@ export default new Vuex.Store({
     user: {},
     products: [],
     carts: [],
-    orders: [],
-    total: []
+    orders: []
   },
   mutations: {
     setPagination (state, payload) {
@@ -41,7 +41,6 @@ export default new Vuex.Store({
       if (!isCart) {
         const data = payload
         data.quantity = 1
-        data.total = null
         state.carts.push(data)
       }
     },
@@ -50,12 +49,20 @@ export default new Vuex.Store({
         return item.id !== payload.id
       })
     },
+    minQty (state, payload) {
+      const isCart = state.carts.find((item) => item.id === payload.id)
+      if (isCart.quantity > 1) {
+        isCart.quantity--
+      } else {
+        state.carts.splice(state.cart.indexOf(isCart, 1))
+      }
+    },
+    plusQty (state, payload) {
+      const isCart = state.carts.find((item) => item.id === payload.id)
+      isCart.quantity++
+    },
     setEmptyCart (state) {
       state.carts = []
-    },
-    setTotal (state, payload) {
-      state.total = payload
-      console.log(payload)
     },
     setOrder (state, payload) {
       state.orders = payload
@@ -73,31 +80,27 @@ export default new Vuex.Store({
         if (error.response.status === 401 && error.response.data.result.message === 'Token is Invalid') {
           localStorage.removeItem('token')
           setex.commit('setToken', null)
-          // alert("Don't Edit Token")
+          // swal('Error!', "Don't Edit Token", 'error')
           router.push('/')
         } else if (error.response.status === 401 && error.response.data.result.message === 'Token is Expired') {
           localStorage.removeItem('token')
           setex.commit('setToken', null)
-          alert('Session is Ended')
+          swal('Error!', 'Session is Ended', 'error')
           router.push('/')
         } else if (error.response.status === 403 && error.response.data.result.message === 'Email Not Found!') {
           localStorage.removeItem('token')
           setex.commit('setToken', null)
-          // this.$swal('Error!', 'Email Address is Wrong!', 'error')
-          alert('Email Address is Wrong!')
+          swal('Error!', 'Email Address is Wrong!', 'error')
           router.push('/')
         } else if (error.response.status === 403 && error.response.data.result.message === 'Password is Wrong!') {
           localStorage.removeItem('token')
           setex.commit('setToken', null)
-          // this.$swal('Error!', 'Password is Wrong!', 'error')
-          alert('Password is Wrong!')
+          swal('Error!', 'Password is Wrong!', 'error')
           router.push('/')
         } else if (error.response.status === 403 && error.response.data.result.message === 'Only Images with Extentions (jpeg/jpg/png) are Allowed') {
-          // this.$swal('Error!', 'Only Images with Extentions (jpeg/jpg/png) are Allowed!', 'error')
-          alert('Only Images with Extentions (jpeg/jpg/png) are Allowed')
+          swal('Error!', 'Only Images with Extentions (jpeg/jpg/png) are Allowed!', 'error')
         } else if (error.response.status === 403 && error.response.data.result.message === 'File Too Large') {
-          // this.$swal('Error!', 'Cannot Upload File Because File Too Large', 'error')
-          alert('Cannot Upload File Because File Too Large')
+          swal('Error!', 'Cannot Upload File Because File Too Large', 'error')
         }
         return Promise.reject(error)
       })
@@ -181,9 +184,6 @@ export default new Vuex.Store({
     },
     order (state) {
       return state.orders
-    },
-    total (state) {
-      return state.total
     },
     select (state) {
       return state.select
