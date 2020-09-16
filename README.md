@@ -1,4 +1,4 @@
-# pos-app-cafe-vuex
+# POS App UfoCafe
 
 ## Introduction
 
