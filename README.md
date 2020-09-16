@@ -21,6 +21,19 @@ is a simple POS application using vuex vuejs which is used to order cafe menus. 
 * [Vue ChartJS](https://vue-chartjs.org/)
 * [Bootstrap](https://getbootstrap.com/)
 
+## Setup .env example
+
+Create .env file in your root project folder.
+
+```env
+
+VUE_APP_ROOT_URL = http://localhost:8080
+VUE_APP_USER_URL = "your backend url"/api/v1/user/
+VUE_APP_PRODUCT_URL = "your backend url"/api/v1/product/
+VUE_APP_HISTORY_URL = "your backend url"/api/v1/history/
+
+```
+
 ## Project setup
 ```
 npm install
