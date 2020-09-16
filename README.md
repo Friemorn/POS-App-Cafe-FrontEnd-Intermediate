@@ -8,10 +8,10 @@ is a simple POS application using vuex vuejs which is used to order cafe menus. 
 
 <p align='center'>
   <span>
-      <image width="250" src='./src/assets/img/1.jpg' />
-      <image width="250" src='./src/assets/img/2.jpg' />
-      <image width="250" src='./src/assets/img/3.jpg' />
-      <image width="250" src='./src/assets/img/4.jpg' />
+      <image width="400" src='./src/assets/img/1.jpg' />
+      <image width="400" src='./src/assets/img/2.jpg' />
+      <image width="400" src='./src/assets/img/3.jpg' />
+      <image width="400" src='./src/assets/img/4.jpg' />
   </span>
  </p>
  
