@@ -1,5 +1,16 @@
 # POS App UfoCafe
 
+## Screenshots
+
+<p align='center'>
+  <span>
+      <image width="200" src='./src/assets/img/1.jpg' />
+      <image width="200" src='./src/assets/img/2.jpg' />
+      <image width="200" src='./src/assets/img/3.jpg' />
+      <image width="200" src='./src/assets/img/4.jpg' />
+  </span>
+ </p>
+
 ## Introduction
 
 is a simple POS application using vuex vuejs which is used to order cafe menus. This application is expected to make it easier for both sellers and buyers at the cafe

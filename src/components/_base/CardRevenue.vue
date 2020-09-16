@@ -22,29 +22,17 @@
         </td>
       </tr>
     </table>
-    <!-- <img src="../../assets/img/Chart.png" alt="chart"> -->
-    <canvas id="my-chart" width="500" height="300"></canvas>
+    <!-- <Chart/> -->
   </div>
 </template>
 
 <script>
-import Chart from 'chart.js'
+// import Chart from '../_base/Chart'
 
 export default {
   name: 'CardRevenue',
-  mounted () {
-    Chart(this.$refs.myChart, {
-      type: 'line',
-      data: {
-        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May'],
-        datasets: [
-          {
-            label: '2018 Sales',
-            data: [300, 700, 450, 750, 450]
-          }
-        ]
-      }
-    })
+  components: {
+    // Chart
   }
 }
 </script>
