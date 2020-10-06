@@ -1,17 +1,37 @@
 <template>
   <div>
     <div class="years-income">
-      <!-- <img src="assets/img/rectangle - this years income.png" alt="tyi"> -->
       <div class="card-history-title">This Year's Income</div>
-      <div class="card-history-value">Rp. 100.000.000.000</div>
-      <div class="card-percentage">+10% Last Year</div>
+      <div class="card-history-value" v-if="thisYearsIncome < 1">Rp. {{number ()}}</div>
+      <div class="card-history-value" v-else>Rp. {{number ()}}</div>
+      <div class="card-percentage" v-if="percentage () > 0">+{{percentage ()}}% Last Year</div>
+      <div class="card-percentage" v-else>{{percentage ()}}% Last Year</div>
     </div>
   </div>
 </template>
 
 <script>
+import { mapActions, mapGetters } from 'vuex'
+
 export default {
-  name: 'CardThisYearsIncome'
+  name: 'CardThisYearsIncome',
+  methods: {
+    ...mapActions(['getThisYearsIncome', 'getLastYearsIncome']),
+    number () {
+      const n = this.thisYearsIncome
+      return String(n).replace(/(.)(?=(\d{3})+$)/g, '$1.')
+    },
+    percentage () {
+      return ((this.thisYearsIncome - this.lastYearsIncome) / this.lastYearsIncome * 100).toFixed(2)
+    }
+  },
+  computed: {
+    ...mapGetters(['thisYearsIncome', 'lastYearsIncome'])
+  },
+  mounted () {
+    this.getThisYearsIncome()
+    this.getLastYearsIncome()
+  }
 }
 </script>
 

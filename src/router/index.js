@@ -24,12 +24,14 @@ const routes = [
   {
     path: '/history',
     name: 'history',
-    component: History
+    component: History,
+    meta: { requiresAuth: true }
   },
   {
     path: '/product',
     name: 'product',
-    component: Product
+    component: Product,
+    meta: { requiresAuth: true }
   }
 ]
 

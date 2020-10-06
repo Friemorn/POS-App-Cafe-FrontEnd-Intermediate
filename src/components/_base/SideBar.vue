@@ -6,15 +6,15 @@
         </div>
       </router-link>
       <router-link class="history" to="/history">
-        <div class="hist">
+        <div class="hist" v-show="user.roleId === 1">
           <img src="../../assets/img/clipboard.png" alt="hist">
         </div>
       </router-link>
-      <div class="add" @click="$emit('launch-modaladd')">
+      <div class="add" @click="$emit('launch-modaladd')" v-show="user.roleId === 1">
         <img src="../../assets/img/add.png" alt="add">
       </div>
       <router-link class="product" to="/product">
-        <div class="prod">
+        <div class="prod" v-show="user.roleId === 1">
           <img src="../../assets/img/product-icon-png-21.jpg" alt="hist">
         </div>
       </router-link>
@@ -26,7 +26,7 @@
     </div>
 </template>
 <script>
-import { mapActions } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 
 export default {
   name: 'SideBar',
@@ -49,6 +49,9 @@ export default {
         }
       })
     }
+  },
+  computed: {
+    ...mapGetters(['user'])
   }
 }
 </script>
@@ -56,7 +59,7 @@ export default {
 <style scoped>
 .sidebar {
   width: 100px;
-  height: 93%;
+  height: 100vh;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;

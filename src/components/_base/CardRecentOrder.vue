@@ -5,13 +5,11 @@
         <tr>
           <td class="ro">Recent Order</td>
           <td class="table-right">
-            <select name="today" class="drop-down">
-              <option value="Today">Today</option>
-              <option value="Today">Yesterday</option>
-              <option value="Today">This Month</option>
-              <option value="Today">Last Month</option>
-              <option value="Today">This Year</option>
-              <option value="Today">Last Year</option>
+            <select name="today" class="drop-down" @change="setData">
+              <option value="">Sort By</option>
+              <option value="today">Today</option>
+              <option value="thisMonth">This Month</option>
+              <option value="thisYear">This Year</option>
             </select>
           </td>
         </tr>
@@ -43,9 +41,18 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex'
+
 export default {
   name: 'CardRecentOrder',
-  props: ['orders', 'get-data']
+  props: ['orders', 'get-data'],
+  methods: {
+    ...mapActions(['getOrder']),
+    setData (e) {
+      const url = `date/${e.target.value}`
+      this.getOrder(url)
+    }
+  }
 }
 </script>
 
@@ -56,7 +63,7 @@ export default {
   padding: 20px;
 }
 .recent-value {
-  height: 200px;
+  height: 400px;
   width: 100%;
   overflow-x: auto;
 }
@@ -73,7 +80,7 @@ thead th {
 .drop-down {
   font-size: 15px;
   height: 27px;
-  width: 70px;
+  width: 100px;
   background-color: #CECECE;
   border-radius: 10px;
   border: none;

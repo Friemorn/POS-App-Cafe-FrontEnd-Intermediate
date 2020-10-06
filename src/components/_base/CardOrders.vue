@@ -1,17 +1,37 @@
 <template>
   <div>
     <div class="orders">
-      <!-- <img src="/../../assets/img/rectangle - orders.png" alt="o"> -->
       <div class="card-history-title">Orders</div>
-      <div class="card-history-value">3.270</div>
-      <div class="card-percentage">+5% Last Week</div>
+      <div class="card-history-value" v-if="thisWeekOrders < 1">{{number ()}}</div>
+      <div class="card-history-value" v-else>{{number ()}}</div>
+      <div class="card-percentage" v-if="percentage () > 0">+{{percentage ()}}% Last Week</div>
+      <div class="card-percentage" v-else>{{percentage ()}}% Last Week</div>
     </div>
   </div>
 </template>
 
 <script>
+import { mapActions, mapGetters } from 'vuex'
+
 export default {
-  name: 'CardOrders'
+  name: 'CardOrders',
+  methods: {
+    ...mapActions(['getThisWeekOrders', 'getLastWeekOrders']),
+    number () {
+      const n = this.thisWeekOrders
+      return String(n).replace(/(.)(?=(\d{3})+$)/g, '$1.')
+    },
+    percentage () {
+      return ((this.thisWeekOrders - this.lastWeekOrders) / this.lastWeekOrders * 100).toFixed(2)
+    }
+  },
+  computed: {
+    ...mapGetters(['thisWeekOrders', 'lastWeekOrders'])
+  },
+  mounted () {
+    this.getThisWeekOrders()
+    this.getLastWeekOrders()
+  }
 }
 </script>
 

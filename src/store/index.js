@@ -6,8 +6,6 @@ import swal from 'sweetalert'
 
 Vue.use(Vuex)
 
-// axios.defaults.headers.common.Authorization = `Bearer ${localStorage.getItem('token')}`
-
 export default new Vuex.Store({
   state: {
     pagination: null,
@@ -18,7 +16,13 @@ export default new Vuex.Store({
     user: {},
     products: [],
     carts: [],
-    orders: []
+    orders: [],
+    todaysIncome: {},
+    yesterdaysIncome: {},
+    thisWeekOrders: {},
+    lastWeekOrders: {},
+    thisYearsIncome: {},
+    lastYearsIncome: {}
   },
   mutations: {
     setPagination (state, payload) {
@@ -31,9 +35,6 @@ export default new Vuex.Store({
     setProduct (state, payload) {
       state.products = payload
     },
-    setSelect (state) {
-      state.select = false
-    },
     addToCart (state, payload) {
       const isCart = state.carts.find((item) => {
         return item.id === payload.id
@@ -42,24 +43,11 @@ export default new Vuex.Store({
         const data = payload
         data.quantity = 1
         state.carts.push(data)
-      }
-    },
-    removeFromCart (state, payload) {
-      state.carts = state.carts.filter((item) => {
-        return item.id !== payload.id
-      })
-    },
-    minQty (state, payload) {
-      const isCart = state.carts.find((item) => item.id === payload.id)
-      if (isCart.quantity > 1) {
-        isCart.quantity--
       } else {
-        state.carts.splice(state.cart.indexOf(isCart, 1))
+        state.carts = state.carts.filter((data) => {
+          return data.id !== payload.id
+        })
       }
-    },
-    plusQty (state, payload) {
-      const isCart = state.carts.find((item) => item.id === payload.id)
-      isCart.quantity++
     },
     setEmptyCart (state) {
       state.carts = []
@@ -69,6 +57,24 @@ export default new Vuex.Store({
     },
     setToken (state, payload) {
       state.token = payload
+    },
+    setTodaysIncome (state, payload) {
+      state.todaysIncome = payload
+    },
+    setYesterdaysIncome (state, payload) {
+      state.yesterdaysIncome = payload
+    },
+    setThisWeekOrders (state, payload) {
+      state.thisWeekOrders = payload
+    },
+    setLastWeekOrders (state, payload) {
+      state.lastWeekOrders = payload
+    },
+    setThisYearsIncome (state, payload) {
+      state.thisYearsIncome = payload
+    },
+    setLastYearsIncome (state, payload) {
+      state.lastYearsIncome = payload
     }
   },
   actions: {
@@ -76,7 +82,6 @@ export default new Vuex.Store({
       axios.interceptors.response.use(function (response) {
         return response
       }, function (error) {
-        console.log(error.response)
         if (error.response.status === 401 && error.response.data.result.message === 'Token is Invalid') {
           localStorage.removeItem('token')
           setex.commit('setToken', null)
@@ -121,7 +126,6 @@ export default new Vuex.Store({
             console.log(res)
             setex.commit('setUser', res.data.result)
             localStorage.setItem('token', res.data.result.token)
-            // axios.defaults.headers.common.Authorization = `Bearer ${res.data.result.token}`
             resolve(res.data.result[0])
           })
           .catch((err) => {
@@ -140,7 +144,6 @@ export default new Vuex.Store({
     getProduct (setex, payload) {
       return new Promise((resolve, reject) => {
         axios.get(process.env.VUE_APP_PRODUCT_URL + `?${payload || ''}page=${this.state.currentPage}&limit=6`)
-        // axios.get(`http://localhost:4000/api/v1/product?${payload || ''}&limit=6`)
           .then((res) => {
             setex.commit('setProduct', res.data.result)
             setex.commit('setPagination', res.data.resultPage)
@@ -152,11 +155,89 @@ export default new Vuex.Store({
           })
       })
     },
-    getOrder (setex) {
+    getOrder (setex, payload) {
       return new Promise((resolve, reject) => {
-        axios.get(process.env.VUE_APP_HISTORY_URL)
+        axios.get(process.env.VUE_APP_HISTORY_URL + `${payload || ''}`)
           .then((res) => {
             setex.commit('setOrder', res.data.result)
+            resolve(res.data.result)
+          })
+          .reject((err) => {
+            console.log(err)
+            reject(err)
+          })
+      })
+    },
+    getTodaysIncome (setex) {
+      return new Promise((resolve, reject) => {
+        axios.get(process.env.VUE_APP_HISTORY_URL + 'date/todaysIncome')
+          .then((res) => {
+            setex.commit('setTodaysIncome', res.data.result[0].amount)
+            resolve(res.data.result)
+          })
+          .reject((err) => {
+            console.log(err)
+            reject(err)
+          })
+      })
+    },
+    getYesterdaysIncome (setex) {
+      return new Promise((resolve, reject) => {
+        axios.get(process.env.VUE_APP_HISTORY_URL + 'date/yesterdaysIncome')
+          .then((res) => {
+            setex.commit('setYesterdaysIncome', res.data.result[0].amount)
+            resolve(res.data.result)
+          })
+          .reject((err) => {
+            console.log(err)
+            reject(err)
+          })
+      })
+    },
+    getThisWeekOrders (setex) {
+      return new Promise((resolve, reject) => {
+        axios.get(process.env.VUE_APP_HISTORY_URL + 'date/thisWeekOrders')
+          .then((res) => {
+            setex.commit('setThisWeekOrders', res.data.result[0].orders)
+            resolve(res.data.result)
+          })
+          .reject((err) => {
+            console.log(err)
+            reject(err)
+          })
+      })
+    },
+    getLastWeekOrders (setex) {
+      return new Promise((resolve, reject) => {
+        axios.get(process.env.VUE_APP_HISTORY_URL + 'date/lastWeekOrders')
+          .then((res) => {
+            setex.commit('setLastWeekOrders', res.data.result[0].orders)
+            resolve(res.data.result)
+          })
+          .reject((err) => {
+            console.log(err)
+            reject(err)
+          })
+      })
+    },
+    getThisYearsIncome (setex) {
+      return new Promise((resolve, reject) => {
+        axios.get(process.env.VUE_APP_HISTORY_URL + 'date/thisYearsIncome')
+          .then((res) => {
+            setex.commit('setThisYearsIncome', res.data.result[0].amount)
+            resolve(res.data.result)
+          })
+          .reject((err) => {
+            console.log(err)
+            reject(err)
+          })
+      })
+    },
+    getLastYearsIncome (setex) {
+      return new Promise((resolve, reject) => {
+        axios.get(process.env.VUE_APP_HISTORY_URL + 'date/lastYearsIncome')
+          .then((res) => {
+            setex.commit('setLastYearsIncome', res.data.result[0].amount)
             resolve(res.data.result)
           })
           .reject((err) => {
@@ -185,8 +266,26 @@ export default new Vuex.Store({
     order (state) {
       return state.orders
     },
-    select (state) {
-      return state.select
+    todaysIncome (state) {
+      return state.todaysIncome
+    },
+    yesterdaysIncome (state) {
+      return state.yesterdaysIncome
+    },
+    thisWeekOrders (state) {
+      return state.thisWeekOrders
+    },
+    lastWeekOrders (state) {
+      return state.lastWeekOrders
+    },
+    thisYearsIncome (state) {
+      return state.thisYearsIncome
+    },
+    lastYearsIncome (state) {
+      return state.lastYearsIncome
+    },
+    user (state) {
+      return state.user
     }
   },
   modules: {

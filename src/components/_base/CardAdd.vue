@@ -1,10 +1,10 @@
 <template>
   <div class="card-product">
-    <div class="card-image">
-      <div class="img-product" @click="selectedProduct">
+    <div class="card-image" @click="selectedProduct">
+      <div class="img-product">
         <img id="img" :src="image" alt="img-product"/>
       </div>
-      <div v-show="select" class="checklist" @click="unSelectedProduct">
+      <div v-show="active ? 'active':'' " class="checklist">
         <img id="select" src="../../assets/img/tick.png" alt="select">
       </div>
     </div>
@@ -16,39 +16,26 @@
 </template>
 
 <script>
-import { mapMutations, mapGetters } from 'vuex'
+import { mapMutations } from 'vuex'
 
 export default {
   name: 'CardAdd',
-  props: ['name', 'image', 'price', 'id'],
+  props: ['name', 'image', 'price', 'id', 'active'],
   data () {
     return {
       select: false
     }
   },
   methods: {
-    ...mapMutations(['addToCart', 'removeFromCart', 'setSelect']),
+    ...mapMutations(['addToCart']),
     selectedProduct () {
-      this.select = true
       this.addToCart({
         name: this.name,
         image: this.image,
         price: this.price,
         id: this.id
       })
-    },
-    unSelectedProduct () {
-      this.select = false
-      this.removeFromCart({
-        name: this.name,
-        image: this.image,
-        price: this.price,
-        id: this.id
-      })
     }
-  },
-  computed: {
-    ...mapGetters(['select'])
   }
 }
 </script>

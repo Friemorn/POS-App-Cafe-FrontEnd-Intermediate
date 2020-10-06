@@ -68,11 +68,7 @@ export default {
       this.showModalAdd = false
     },
     SearchOn () {
-      if (!this.showSearch) {
-        this.showSearch = true
-      } else {
-        this.showSearch = false
-      }
+      this.showSearch = !this.showSearch
     },
     ...mapActions(['getProduct'])
   },

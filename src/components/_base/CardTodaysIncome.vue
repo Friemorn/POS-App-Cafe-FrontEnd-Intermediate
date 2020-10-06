@@ -1,17 +1,37 @@
 <template>
   <div>
     <div class="todays-income">
-      <!-- <img src="/../../assets/img/rectangle - todays income.png" alt="ti"> -->
       <div class="card-history-title">Todays's Income</div>
-      <div class="card-history-value">Rp. 1.000.000</div>
-      <div class="card-percentage">+2% Yesterday</div>
+      <div class="card-history-value" v-if="todaysIncome < 1">Rp. 0</div>
+      <div class="card-history-value" v-else>Rp. {{number ()}}</div>
+      <div class="card-percentage" v-if="percentage () > 0">+{{percentage ()}}% Yesterday</div>
+      <div class="card-percentage" v-else>{{percentage ()}}% Yesterday</div>
     </div>
   </div>
 </template>
 
 <script>
+import { mapActions, mapGetters } from 'vuex'
+
 export default {
-  name: 'CardTodaysIncome'
+  name: 'CardTodaysIncome',
+  methods: {
+    ...mapActions(['getTodaysIncome', 'getYesterdaysIncome']),
+    number () {
+      const n = this.todaysIncome
+      return String(n).replace(/(.)(?=(\d{3})+$)/g, '$1.')
+    },
+    percentage () {
+      return ((this.todaysIncome - this.yesterdaysIncome) / this.yesterdaysIncome * 100).toFixed(2)
+    }
+  },
+  computed: {
+    ...mapGetters(['todaysIncome', 'yesterdaysIncome'])
+  },
+  mounted () {
+    this.getTodaysIncome()
+    this.getYesterdaysIncome()
+  }
 }
 </script>
 

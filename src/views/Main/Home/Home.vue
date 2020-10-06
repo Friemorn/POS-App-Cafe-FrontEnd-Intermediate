@@ -22,7 +22,7 @@
       </div>
       <div class="main-content">
         <div class="card-product" v-for="product in products" :key="product.id">
-          <CardAdd :image="product.image" :name="product.name" :price="product.price" :id="product.id"/>
+          <CardAdd :active="checkProductActive(product.id)" :image="product.image" :name="product.name" :price="product.price" :id="product.id"/>
         </div>
       </div>
       <div class="pagination">
@@ -116,24 +116,21 @@ export default {
       this.showModalCheckout = false
     },
     SideBarOn () {
-      if (!this.showSideBar) {
-        this.showSideBar = true
-      } else {
-        this.showSideBar = false
-      }
+      this.showSideBar = !this.showSideBar
     },
     SearchOn () {
-      if (!this.showSearch) {
-        this.showSearch = true
-      } else {
-        this.showSearch = false
-      }
+      this.showSearch = !this.showSearch
+    },
+    checkProductActive (id) {
+      return this.cart.find(item => {
+        return item.id === id
+      })
     },
     ...mapMutations(['addToCart']),
     ...mapActions(['login', 'getProduct'])
   },
   computed: {
-    ...mapGetters(['countCart', 'products', 'pagination'])
+    ...mapGetters(['cart', 'countCart', 'products', 'pagination'])
   },
   mounted () {
     this.getProduct()

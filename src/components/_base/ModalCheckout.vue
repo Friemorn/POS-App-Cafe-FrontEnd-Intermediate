@@ -35,7 +35,7 @@
           <button id="btn-print" @click="$emit('close-modal')">Print</button>
         </div>
         <div id="or">Or</div>
-        <div><Button id="btn-send-email">Send Email</Button></div>
+        <div><Button id="btn-send-email" @click="addHistory">Send Email</Button></div>
       </div>
     </div>
   </div>
@@ -48,15 +48,6 @@ import { mapGetters } from 'vuex'
 export default {
   name: 'ModalCheckout',
   props: ['close-modal'],
-  data () {
-    return {
-      invoices: '#10930',
-      cashier: 1,
-      cashierName: 'Pevita Pearce',
-      orders: '',
-      amount: null
-    }
-  },
   methods: {
     totalPrice () {
       return this.cart.reduce((a, b) => a + b.quantity * 11 / 10 * b.price, 0)
@@ -64,24 +55,47 @@ export default {
     ppn () {
       return this.cart.reduce((a, b) => a + b.quantity * 1 / 10 * b.price, 0)
     },
+    totalOrder () {
+      return this.cart.map(({ name }) => name).join(', ')
+    },
     addHistory () {
       axios.post(process.env.VUE_APP_HISTORY_URL, {
-        invoices: this.invoices,
-        cashier: this.cashier,
-        cashierName: this.cashierName,
-        orders: this.orders,
-        amount: this.amount
+        invoices: '#10930',
+        cashier: 1,
+        cashierName: 'Pevita Pearce',
+        orders: this.totalOrder(),
+        amount: this.totalPrice()
       })
         .then((res) => {
-          alert('Orders Added')
+          this.$swal('Order Success', 'Order Successfully Added', 'success')
           this.$emit('close-modal')
         })
         .catch((res) => {
         })
+    },
+    sendEmail () {
+      axios.post(process.env.VUE_APP_EMAIL_URL, {
+        to: 'dewondofriemorn.s4a@gmail.com',
+        subject: 'subject',
+        order: 'test'
+      })
+        .then((res) => {
+          this.$swal('Order Success', 'Order Successfully Send to Email', 'success')
+          this.$emit('close-modal')
+        })
+        .catch((err) => {
+          console.log(err)
+        })
+    },
+    checkOut () {
+      this.addHistory()
+      this.sendEmail()
+      this.$swal('Order Success', 'Order Successfully Send to Email', 'success')
+      this.$emit('close-modal')
     }
   },
   computed: {
-    ...mapGetters(['countCart', 'cart', 'total'])
+    ...mapGetters(['countCart', 'cart', 'total', 'user'])
   }
 }
 </script>
