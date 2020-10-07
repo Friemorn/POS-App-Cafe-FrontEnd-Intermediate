@@ -102,6 +102,10 @@ export default new Vuex.Store({
           setex.commit('setToken', null)
           swal('Error!', 'Password is Wrong!', 'error')
           router.push('/')
+        } else if (error.response.status === 403 && error.response.data.result.message === 'Email is Already Registered') {
+          swal('Error!', 'Email is Already Registered', 'error')
+        } else if (error.response.status === 403 && error.response.data.result.message === 'Password must have at least 8 character!') {
+          swal('Error!', 'Password must have at least 8 character!', 'error')
         } else if (error.response.status === 403 && error.response.data.result.message === 'Only Images with Extentions (jpeg/jpg/png) are Allowed') {
           swal('Error!', 'Only Images with Extentions (jpeg/jpg/png) are Allowed!', 'error')
         } else if (error.response.status === 403 && error.response.data.result.message === 'File Too Large') {

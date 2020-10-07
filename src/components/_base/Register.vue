@@ -19,7 +19,7 @@
         <input type="password" class="form__input form-control" placeholder="Password" v-model.trim="$v.password.$model"/>
       </div>
       <div class="error" v-if="!$v.password.required">Password is required!</div>
-      <div class="error" v-if="!$v.password.minLength">Password must have at least {{ $v.password.$params.minLength.min }} letters.</div>
+      <div class="error" v-if="!$v.password.minLength">Password must have at least {{ $v.password.$params.minLength.min }} character!</div>
       <div class="form-group" :class="{ 'form-group--error': $v.repeatPassword.$error }">
         <label class="form__label">Repeat password</label>
         <input type="password" class="form__input form-control" placeholder="Password" v-model.trim="$v.repeatPassword.$model"/>
@@ -67,7 +67,6 @@ export default {
           this.$swal('Register Success', 'User Added Successfully', 'success')
         })
         .catch((res) => {
-          this.$swal('Warning!', 'User Already Registered', 'warning')
         })
     }
   }

@@ -8,7 +8,8 @@
         <div class="cart-list-name">{{item.name}}</div>
         <div class="qty">
           <div class="cart-counter">
-            <div class="minus" @click="item.quantity--" :disabled="item.quantity === 1">-</div>
+            <div class="minus" v-if="item.quantity > 1" @click="item.quantity--">-</div>
+            <div class="minus" v-else>-</div>
             <div class="number">{{item.quantity}}</div>
             <div class="plus" @click="item.quantity++">+</div>
           </div>
