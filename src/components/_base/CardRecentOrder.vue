@@ -6,7 +6,7 @@
           <td class="ro">Recent Order</td>
           <td class="table-right">
             <select name="today" class="drop-down" @change="setData">
-              <option value="">Sort By</option>
+              <option value="">Recent By</option>
               <option value="today">Today</option>
               <option value="thisMonth">This Month</option>
               <option value="thisYear">This Year</option>
