@@ -153,7 +153,7 @@ export default new Vuex.Store({
             setex.commit('setPagination', res.data.resultPage)
             resolve(res.data.result)
           })
-          .reject((err) => {
+          .catch((err) => {
             console.log(err)
             reject(err)
           })
@@ -166,7 +166,7 @@ export default new Vuex.Store({
             setex.commit('setOrder', res.data.result)
             resolve(res.data.result)
           })
-          .reject((err) => {
+          .catch((err) => {
             console.log(err)
             reject(err)
           })
@@ -179,7 +179,7 @@ export default new Vuex.Store({
             setex.commit('setTodaysIncome', res.data.result[0].amount)
             resolve(res.data.result)
           })
-          .reject((err) => {
+          .catch((err) => {
             console.log(err)
             reject(err)
           })
@@ -192,7 +192,7 @@ export default new Vuex.Store({
             setex.commit('setYesterdaysIncome', res.data.result[0].amount)
             resolve(res.data.result)
           })
-          .reject((err) => {
+          .catch((err) => {
             console.log(err)
             reject(err)
           })
@@ -205,7 +205,7 @@ export default new Vuex.Store({
             setex.commit('setThisWeekOrders', res.data.result[0].orders)
             resolve(res.data.result)
           })
-          .reject((err) => {
+          .catch((err) => {
             console.log(err)
             reject(err)
           })
@@ -218,7 +218,7 @@ export default new Vuex.Store({
             setex.commit('setLastWeekOrders', res.data.result[0].orders)
             resolve(res.data.result)
           })
-          .reject((err) => {
+          .catch((err) => {
             console.log(err)
             reject(err)
           })
@@ -231,7 +231,7 @@ export default new Vuex.Store({
             setex.commit('setThisYearsIncome', res.data.result[0].amount)
             resolve(res.data.result)
           })
-          .reject((err) => {
+          .catch((err) => {
             console.log(err)
             reject(err)
           })
@@ -244,7 +244,7 @@ export default new Vuex.Store({
             setex.commit('setLastYearsIncome', res.data.result[0].amount)
             resolve(res.data.result)
           })
-          .reject((err) => {
+          .catch((err) => {
             console.log(err)
             reject(err)
           })
